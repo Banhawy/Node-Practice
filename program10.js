@@ -13,27 +13,17 @@
 
 var net = require('net');
 
-var add_zero = function (number){
-    return "0" + number.toString();
+function needs_zero (number) {
+    return (number<10 ? '0' : '') + number;
 };
-
-
-var string_num = function (year, month, day, hour, minute) {
-    var format = year.toString() + '-' + needs_zero(month) + '-' +needs_zero(day) + ' ' + needs_zero(hour) + ':' + needs_zero(minute) + '\n';
-    console.log(format);
-    return format;
-};
-
-var needs_zero = function (number) {
-    return (number<10) ? add_zero(number) : number.toString();
-};
-
-var date = new Date();
 	
-var data = string_num(date.getFullYear(),date.getMonth(), date.getDate(), date.getHours(), date.getMinutes());
+function data() { 
+    var date = new Date();
+    return date.getFullYear() + '-' + needs_zero(date.getMonth() + 1) + '-' + needs_zero(date.getDate()) + ' ' +  needs_zero(date.getHours()) + ':' +  needs_zero(date.getMinutes()) + '\n';
+}
 
 var server = net.createServer(function (socket){
-	socket.end(data);
+	socket.end(data());
     });
 
 server.listen(process.argv[2]);
